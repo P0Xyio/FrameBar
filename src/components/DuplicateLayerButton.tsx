@@ -12,7 +12,7 @@ interface Props {
 const DuplicateLayerButton:React.FunctionComponent<Props> = (props: Props) => {
     const onClick = async () => {
         
-        await photoshop.core.executeAsModal(async () => {
+        photoshop.core.executeAsModal(async () => {
             const currentDocument = photoshop.app.activeDocument
 
             if (!currentDocument) {

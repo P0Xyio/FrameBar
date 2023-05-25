@@ -55,7 +55,7 @@ const CreateAnimationButton:React.FunctionComponent<Props> = (props: Props) => {
             documentSettings.fillColor = color
         }
 
-        await photoshop.core.executeAsModal(async () => {
+        photoshop.core.executeAsModal(async () => {
             await photoshop.app.documents.add(documentSettings); // create new document
             await photoshop.app.activeDocument.layers.add(); // add first layer
             await photoshop.action.batchPlay([{ "_obj": "makeTimeline" }], {}); // add timeline
