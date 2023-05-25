@@ -84,8 +84,21 @@ const NewFrameButton:React.FunctionComponent<Props> = (props: Props) => {
                 return photoshop.core.showAlert("To add a frame, please create a video group.")
             }
         
-            // expand the group, add a new layer and adjust the length
+            // make sure the video group/layer is selected, expand the group, add a new layer and adjust the length
             const actions: ActionDescriptor[] = [  
+                {
+                    "_obj": "select",
+                    "_target": [
+                        {
+                            "_ref": "layer",
+                            "_name": animGroup.name
+                        }
+                    ],
+                    "makeVisible": false,
+                    "layerID": [
+                        animGroup.id
+                    ],
+                },
                 {
                     "_obj": "set",
                     "_target": {
@@ -115,31 +128,50 @@ const NewFrameButton:React.FunctionComponent<Props> = (props: Props) => {
                     }
                 },
             ]
-        
-            // select the video group in case it's not selected
-            if (animGroup.selected === false) {
-                actions.unshift({
-                    "_obj": "select",
-                    "_target": [
+            
+            if (selectedLayer) {
+                // get itemIndex of the selected layer
+                actions.push({
+                    _obj: "get",
+                    _target: [
                         {
-                            "_ref": "layer",
-                            "_name": animGroup.name
+                            _property: "itemIndex"
+                        },
+                        {
+                            _ref: "layer",
+                            _id: selectedLayer.id
+                        },
+                        {
+                            _ref: "document",
+                            _id: currentDocument.id
                         }
-                    ],
-                    "makeVisible": false,
-                    "layerID": [
-                        animGroup.id
-                    ],
+                    ]
                 })
             }
         
             const result = await photoshop.action.batchPlay(actions, {});
             if (!selectedLayer) { return }
             if (!result?.[2]?.layerID) { return }
-        
-            const layer = getLayerById(result[2].layerID, currentDocument.layers)
-            if (!layer){ return }
-            layer.move(selectedLayer, constants.ElementPlacement.PLACEBEFORE)
+            if (!result?.[4]?.itemIndex) { return }
+
+            // place the new frame, after the selected one
+            await photoshop.action.batchPlay([
+                {
+                    _obj: "move",
+                    _target: [
+                        {
+                            _ref: "layer",
+                            _enum: "ordinal",
+                            _value: "targetEnum"
+                        }
+                    ],
+                    to: {
+                        _ref: "layer",
+                        _index: result[4].itemIndex
+                    },
+                    layerID: [ result[2].layerID ]
+                }
+            ], {})
         }, {"commandName": "createNewFrame"});
     }
 
