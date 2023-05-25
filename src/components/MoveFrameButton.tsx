@@ -32,22 +32,7 @@ const MoveFrameButton:React.FunctionComponent<Props> = (props: Props) => {
         const currentDocument = photoshop.app.activeDocument
 
         // check if document has background layer. background layer affects layer indexxes
-        const _hasBackgroundLayer = await photoshop.action.batchPlay([
-            {
-                _obj: "get",
-                _target: [
-                    {
-                        _property: "hasBackgroundLayer"
-                    },
-                    {
-                        _ref: "document",
-                        _id: currentDocument.id
-                    }
-                ]
-            }
-        ], {})
-
-        const hasBackgroundLayer: boolean = _hasBackgroundLayer[0]["hasBackgroundLayer"]
+        const hasBackgroundLayer: boolean = currentDocument.backgroundLayer !== null
 
         if (!currentDocument) {
             return photoshop.core.showAlert("Please create a document first, to use the toolbar.");
@@ -63,7 +48,7 @@ const MoveFrameButton:React.FunctionComponent<Props> = (props: Props) => {
             return photoshop.core.showAlert("Could not move the frame because it is locked.");
         }
         
-        await photoshop.core.executeAsModal(async () => {
+        photoshop.core.executeAsModal(async () => {
             const layerId = currentDocument.activeLayers[0].id
 
             // get selected layer index
