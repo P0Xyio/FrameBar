@@ -1,0 +1,26 @@
+#createProjectDialog sp-heading {
+    margin-top: 0;
+}
+
+#createProjectDialog sp-textfield[type="number"] {
+    width: 4rem;
+}
+
+#createProjectDialog sp-picker {
+    cursor: pointer;
+    width: 10rem;
+}
+
+#createProjectDialog sp-button {
+    cursor: pointer;
+}
+
+#createProjectDialog .inputsWrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+}
+
+#createProjectDialog footer > sp-button:last-child {
+    margin-left: 1rem;
+}

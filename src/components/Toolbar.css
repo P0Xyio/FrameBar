@@ -1,0 +1,22 @@
+#toolbarWrapper {
+    display: flex;
+    flex-direction: row;
+    padding: 4px;
+}
+
+#toolbarWrapper > sp-action-group {
+    margin-right: 0.6rem;
+    margin-bottom: 0.6rem;
+}
+
+#toolbarWrapper > sp-action-group > sp-action-button {
+    margin: 0;
+    padding: 0.1rem 0.1rem;
+    cursor: pointer;
+}
+
+@media (max-width: 200px) {
+    #toolbarWrapper {
+        flex-direction: column;
+    }
+}

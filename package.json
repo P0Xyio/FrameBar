@@ -1,0 +1,34 @@
+{
+    "name": "framebar",
+    "version": "1.0.1",
+    "description": "Adobe Photoshop plugin extending its animation capabilities",
+    "author": "P0Xyio",
+    "license": "MIT",
+    "scripts": {
+        "watch": "nodemon -w src -e js,jsx,ts,tsx,json,css,html -w webpack.config.js -x npm run build",
+        "build": "webpack"
+    },
+    "devDependencies": {
+        "@types/jest": "^29.5.1",
+        "@types/node": "^18.16.2",
+        "@types/photoshop": "^24.5.0",
+        "@types/react": "^18.2.0",
+        "@types/react-dom": "^18.2.1",
+        "copy-webpack-plugin": "^11.0.0",
+        "css-loader": "^6.7.3",
+        "file-loader": "^6.2.0",
+        "style-loader": "^3.3.1",
+        "ts-loader": "^9.4.2",
+        "tsconfig-paths-webpack-plugin": "^4.0.1",
+        "typescript": "^5.0.4",
+        "webpack": "^5.82.1",
+        "webpack-cli": "^5.1.1"
+    },
+    "dependencies": {
+        "cross-env": "^7.0.2",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "react-uxp-spectrum": "github:p0xyio/react-uxp-spectrum",
+        "zustand": "^4.3.7"
+    }
+}

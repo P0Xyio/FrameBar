@@ -1,0 +1,46 @@
+#toolbarSettingsDialog sp-heading {
+    margin-top: 0;
+}
+
+#toolbarSettingsDialog sp-checkbox {
+    cursor: pointer;
+}
+
+#toolbarSettingsDialog .gridContainer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    margin-top: 1.5rem;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+#toolbarSettingsDialog .buttonWrapper {
+    display: flex;
+    flex: 0 0 calc(50% - 1rem);
+    align-items: flex-start;
+    margin-bottom: 0.5rem;
+    min-height: 3.5rem;
+}
+
+#toolbarSettingsDialog .buttonWrapper:nth-child(odd) {
+    margin-right: 1rem;
+}
+
+#toolbarSettingsDialog sp-action-button {
+    padding: 0;
+    margin: 0 0.3rem;
+}
+
+#toolbarSettingsDialog sp-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    min-height: 2.5rem;
+    max-width: 12rem;
+}
+
+#toolbarSettingsDialog sp-button {
+    cursor: pointer;
+}

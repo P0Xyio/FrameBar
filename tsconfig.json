@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "moduleResolution": "node",
+        "noImplicitAny": true,
+        "jsx": "react",
+        "module": "ESNext",
+        "outDir": "./dist/",
+        "lib": ["ESNext", "dom"],
+        "sourceMap": true,
+        "target": "ES2021",
+        "typeRoots" : ["./node_modules/@types"],
+        "paths": {
+            "@utils/*": ["./src/utils/*"],
+            "@components/*": ["./src/components/*"],
+        },
+    }
+}

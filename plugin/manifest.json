@@ -1,0 +1,45 @@
+{
+    "manifestVersion": 5,
+    "id": "7d1256ba",
+    "name": "FrameBar",
+    "version": "1.0.1",
+    "main": "index.html",
+    "host": [
+        {
+            "app": "PS",
+            "minVersion": "23.3"
+        }
+    ],
+    "entrypoints": [
+        {
+            "type": "panel",
+            "id": "toolbar",
+            "label": {
+                "default": "Toolbar"
+            },
+            "minimumSize": { "width": 52, "height": 52 },
+            "maximumSize": { "width": 4000, "height": 4000 },
+            "preferredDockedSize": { "width": 1000, "height": 50 },
+            "preferredFloatingSize": { "width": 1000, "height": 50 },
+            "icons": [
+                {
+                    "width": 24,
+                    "height": 24,
+                    "path": "icons/toolbar_light.png",
+                    "scale": [ 1, 2 ],
+                    "theme": [ "dark", "darkest" ]
+                },
+                {
+                    "width": 24,
+                    "height": 24,
+                    "path": "icons/toolbar_dark.png",
+                    "scale": [ 1, 2 ],
+                    "theme": [ "lightest", "light" ]
+                }
+            ]
+        }
+    ],
+    "icons": [
+        {"width":48,"height":48,"path":"icons/pluginIcon.png","scale":[1,2]}
+    ]
+}
