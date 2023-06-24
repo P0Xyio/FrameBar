@@ -12,7 +12,7 @@ interface Props {
 const DuplicateLayerButton:React.FunctionComponent<Props> = (props: Props) => {
     const onClick = async () => {
         
-        photoshop.core.executeAsModal(async () => {
+        photoshop.core.executeAsModal(async (executionContext) => {
             const currentDocument = photoshop.app.activeDocument
 
             if (!currentDocument) {
@@ -21,10 +21,11 @@ const DuplicateLayerButton:React.FunctionComponent<Props> = (props: Props) => {
 
             const selectedLayers: Layer[] = currentDocument.activeLayers
 
-            selectedLayers.forEach((layer) => {
-                layer.duplicate()
-            })
-        }, {"commandName": "Duplicating frame(s)"});
+            for (const [index, layer] of selectedLayers.entries()) {
+                await layer.duplicate()
+                executionContext.reportProgress({ "value": (index + 1) / selectedLayers.length })
+            }
+        }, {"commandName": "Duplicating frame(s)"})
     }
 
     return (

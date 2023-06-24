@@ -12,7 +12,7 @@ interface Props {
 const DeleteLayerButton:React.FunctionComponent<Props> = (props: Props) => {
     const onClick = async () => {
     
-        photoshop.core.executeAsModal(async () => {
+        photoshop.core.executeAsModal(async (executionContext) => {
             const currentDocument = photoshop.app.activeDocument
 
             if (!currentDocument) {
@@ -25,9 +25,10 @@ const DeleteLayerButton:React.FunctionComponent<Props> = (props: Props) => {
                 return photoshop.core.showAlert("Could not delete frames because no layers are selected.");
             }
 
-            selectedLayers.forEach((layer) => {
+            for (const [index, layer] of selectedLayers.entries()) {
                 layer.delete()
-            })
+                executionContext.reportProgress({ "value": (index + 1) / selectedLayers.length })
+            }
         }, {"commandName": "Deleting layer(s)"});
     }
 
