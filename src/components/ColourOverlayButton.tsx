@@ -61,26 +61,30 @@ const iconsPath: iconsPath = {
     none: "colourOverlayNone",
 }
 
-const ColourOverlayButton:React.FunctionComponent<Props> = (props: Props) => {
-    // check if the colour overlay is present 
-    // as we are applying only the edge colours, there should be one 255 and two zeros in the RGB
-    const checkIfHasColourOverlay = (colourOverlay: any):Boolean => {
-        if (colourOverlay._obj !== "RGBColor") { return false }
-        const coloursCount: coloursCount = {
-            "255": 0, 
-            "0": 0
-        }
-
-        Object.values(colourOverlay).forEach((element:any) => {
-            if (typeof(element) === "string") { return }
-            const colour:string = String(Math.floor(element))
-
-            coloursCount[colour as keyof coloursCount] ++
-        })
-
-        return coloursCount["255"] == 1 && coloursCount["0"] == 2
+/**
+ * check if the colour overlay is present 
+ * as we are applying only the edge colours, there should be one 255 and two zeros in the RGB
+ * @param colourOverlay 
+ * @returns 
+ */
+const checkIfHasColourOverlay = (colourOverlay: any):Boolean => {
+    if (colourOverlay._obj !== "RGBColor") { return false }
+    const coloursCount: coloursCount = {
+        "255": 0, 
+        "0": 0
     }
 
+    Object.values(colourOverlay).forEach((element:any) => {
+        if (typeof(element) === "string") { return }
+        const colour:string = String(Math.floor(element))
+
+        coloursCount[colour as keyof coloursCount] ++
+    })
+
+    return coloursCount["255"] == 1 && coloursCount["0"] == 2
+}
+
+const ColourOverlayButton:React.FunctionComponent<Props> = (props: Props) => {
     const onClick = async () => {
         const currentDocument = photoshop.app.activeDocument
 
@@ -127,6 +131,14 @@ const ColourOverlayButton:React.FunctionComponent<Props> = (props: Props) => {
         ]
 
         photoshop.core.executeAsModal(async () => {
+            const selectedLayers: Layer[] = currentDocument.activeLayers
+
+            if (selectedLayers.length === 0) {
+                return photoshop.core.showAlert("Could not apply colour overlay to the layer because no layers are selected.");
+            } else if (selectedLayers.length > 1) {
+                return photoshop.core.showAlert("Could not apply colour overlay to the layer because more than one layer is selected.");
+            }
+
             // gets layer blending options
             const _blendingOptions: ActionDescriptor[] = await photoshop.action.batchPlay([
                 {
@@ -145,158 +157,63 @@ const ColourOverlayButton:React.FunctionComponent<Props> = (props: Props) => {
                 }
             ], {});
 
-            const selectedLayers: Layer[] = currentDocument.activeLayers
+            const effects = _blendingOptions[0]?.layerEffects
+            const colour = props.colour
+            const hasSolidFill = effects?.solidFill
+            const hasMultipleFills = effects?.solidFillMulti
 
-            if (selectedLayers.length === 0) {
-                return photoshop.core.showAlert("Could not apply colour overlay to the layer because no layers are selected.");
-            } else if (selectedLayers.length > 1) {
-                return photoshop.core.showAlert("Could not apply colour overlay to the layer because more than one layer is selected.");
+            const newSolidFill = {
+                "_obj": "solidFill",
+                "enabled": true,
+                "present": true,
+                "showInDialog": true,
+                "mode": {
+                    "_enum": "blendMode",
+                    "_value": "normal"
+                },
+                "color": {
+                    "_obj": "RGBColor",
+                    ...colorData[colour as keyof coloursContainer]
+                },
+                "opacity": {
+                    "_unit": "percentUnit",
+                    "_value": 100
+                }
             }
-    
+
             // if no layerEffects are present, just add solidFill
-            if (!_blendingOptions[0]?.layerEffects) {
-                if (props.colour === "none") {
-                    return
+            if (!effects && colour !== "none") {
+                actions[1]["to"].solidFill = newSolidFill
+            } else if (hasSolidFill) { // if there is one solidFill
+                const overlayApplied = checkIfHasColourOverlay(effects.solidFill.color);
+            
+                if (colour === "none" && overlayApplied) {
+                    delete(effects.solidFill)
+                } else if (overlayApplied) {
+                    effects.solidFill = newSolidFill
+                } else if (colour !== "none") {
+                    effects.solidFillMulti = [newSolidFill, effects.solidFill]
+                    delete(effects.solidFill)
                 }
+            } else if (hasMultipleFills) { // if there are multiple colour fills
+                const overlayIndex = effects.solidFillMulti.findIndex((colourOverlay: any) => checkIfHasColourOverlay(colourOverlay.color))
 
-                 actions[1]["to"].solidFill = {
-                    "_obj":  "solidFill",
-                    "enabled": true,
-                    "present": true,
-                    "showInDialog": true,
-                    "mode": {
-                        "_enum": "blendMode",
-                        "_value": "normal"
-                    },
-                    "color": {
-                        "_obj": "RGBColor",
-                         ...colorData[props.colour as keyof coloursContainer]
-                    },
-                    "opacity": {
-                        "_unit": "percentUnit",
-                        "_value": 100
-                    }
-                }
-            } else {
-                // if there is one solidFill
-                if (_blendingOptions[0]?.layerEffects?.solidFill) {
-                    // check if colour overlay was applied
-                    if (checkIfHasColourOverlay(_blendingOptions[0].layerEffects.solidFill.color)) {
-                        if (props.colour === "none") {
-                            delete(_blendingOptions[0].layerEffects.solidFill)
-                        } else {
-                            _blendingOptions[0].layerEffects.solidFill = {
-                                "_obj": "solidFill",
-                                "enabled": true,
-                                "present": true,
-                                "showInDialog": true,
-                                "mode": {
-                                    "_enum": "blendMode",
-                                    "_value": "normal"
-                                },
-                                "color": {
-                                    "_obj": "RGBColor",
-                                    ...colorData[props.colour as keyof coloursContainer]
-                                },
-                                "opacity": {
-                                    "_unit": "percentUnit",
-                                    "_value": 100
-                                }
-                            }
-                        }
-                    } else {
-                        if (props.colour === "none") {
-                            return
-                        }
-    
-                        // if solidFill was created by user, we now create solidFillMulti
-                        _blendingOptions[0].layerEffects.solidFillMulti = [
-                            {
-                                "_obj": "solidFill",
-                                "enabled": true,
-                                "present": true,
-                                "showInDialog": true,
-                                "mode": {
-                                    "_enum": "blendMode",
-                                    "_value": "normal"
-                                },
-                                "color": {
-                                    "_obj": "RGBColor",
-                                    ...colorData[props.colour as keyof coloursContainer]
-                                },
-                                "opacity": {
-                                    "_unit": "percentUnit",
-                                    "_value": 100
-                                }
-                            }
-                        ]
-    
-                        // restore user's fill
-                        _blendingOptions[0].layerEffects.solidFillMulti.push(_blendingOptions[0].layerEffects.solidFill)
-    
-                        // cleanup 
-                        delete(_blendingOptions[0].layerEffects.solidFill)
-                    }
-                } else if (_blendingOptions[0]?.layerEffects?.solidFillMulti) { // if there are multiple colour fills
-                    let found = -1
-
-                    // check if colour oberlay was applied
-                    _blendingOptions[0].layerEffects.solidFillMulti.forEach((colourOverlay: any, index: number) => {
-                        if (found !== -1) { return } 
+                if (overlayIndex !== -1) {
+                    if (colour !== "none") {
                         // if colour overlay is present, we change the colour
-                        if (checkIfHasColourOverlay(colourOverlay.color)) {
-                            if (props.colour !== "none") {
-                                _blendingOptions[0].layerEffects.solidFillMulti[index] = {
-                                    "_obj": "solidFill",
-                                    "enabled": true,
-                                    "present": true,
-                                    "showInDialog": true,
-                                    "mode": {
-                                        "_enum": "blendMode",
-                                        "_value": "normal"
-                                    },
-                                    "color": {
-                                        "_obj": "RGBColor",
-                                        ...colorData[props.colour as keyof coloursContainer]
-                                    },
-                                    "opacity": {
-                                        "_unit": "percentUnit",
-                                        "_value": 100
-                                    }
-                                }
-                            }
-    
-                            found = index
-                        }
-                    })
-    
-                    if (props.colour === "none" && found !== -1) {
-                        // remove the colour from array once we finish the looo
-                        _blendingOptions[0].layerEffects.solidFillMulti.splice(found, 1)
-                    } else if (found === -1 && props.colour !== "none") {
-                        // add fill if it wasn't found
-                        _blendingOptions[0].layerEffects.solidFillMulti.unshift({
-                            "_obj": "solidFill",
-                            "enabled": true,
-                            "present": true,
-                            "showInDialog": true,
-                            "mode": {
-                                "_enum": "blendMode",
-                                "_value": "normal"
-                            },
-                            "color": {
-                                "_obj": "RGBColor",
-                                ...colorData[props.colour as keyof coloursContainer]
-                            },
-                            "opacity": {
-                                "_unit": "percentUnit",
-                                "_value": 100
-                            }
-                        })
+                        effects.solidFillMulti[overlayIndex] = newSolidFill
+                    } else {
+                        // remove the colour overlay
+                        effects.solidFillMulti.splice(overlayIndex, 1)
                     }
+                } else if (colour !== "none") {
+                    // add fill if it wasn't found
+                    effects.solidFillMulti.unshift(newSolidFill)
                 }
-    
-                Object.assign(actions[1]["to"], _blendingOptions[0].layerEffects)
+            }
+
+            if (effects) {
+                Object.assign(actions[1]["to"], effects)
             }
 
             return photoshop.action.batchPlay(actions, {});
