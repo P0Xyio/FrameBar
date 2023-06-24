@@ -21,6 +21,10 @@ const DuplicateLayerButton:React.FunctionComponent<Props> = (props: Props) => {
 
             const selectedLayers: Layer[] = currentDocument.activeLayers
 
+            if (selectedLayers.length === 0) {
+                return photoshop.core.showAlert("Could not duplicate frames because no layers are selected.");
+            }
+
             for (const [index, layer] of selectedLayers.entries()) {
                 await layer.duplicate()
                 executionContext.reportProgress({ "value": (index + 1) / selectedLayers.length })
