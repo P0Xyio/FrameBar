@@ -36,7 +36,7 @@ const FlipLayerButton:React.FunctionComponent<Props> = (props: Props) => {
         }
 
         try {
-            await photoshop.core.executeAsModal(flipLayer, {"commandName": "flipLayer"});
+            await photoshop.core.executeAsModal(flipLayer, {"commandName": "Flipping layer"});
         } catch (e) { console.error(e) }
     }
 

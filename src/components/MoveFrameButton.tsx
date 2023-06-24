@@ -131,7 +131,7 @@ const MoveFrameButton:React.FunctionComponent<Props> = (props: Props) => {
                     }
                 ], {})
             }
-        }, {"commandName": "moveFrame"});
+        }, {"commandName": "Moving frame"});
     }
 
     return (

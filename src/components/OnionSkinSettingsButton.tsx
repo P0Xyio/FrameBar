@@ -22,7 +22,7 @@ const OnionSkinSettingsButton:React.FunctionComponent<Props> = (props: Props) =>
                 if (!result.available) {
                     return photoshop.core.showAlert("The animation must have at least two frames to open Onion Skin Settings.");
                 }
-            }, {"commandName": "enableOnionSkin"});
+            }, {"commandName": "Opening Onion Skin Settings menu"});
         } catch (e) { console.error(e) }
     }
 

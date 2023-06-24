@@ -28,7 +28,7 @@ const DeleteLayerButton:React.FunctionComponent<Props> = (props: Props) => {
             selectedLayers.forEach((layer) => {
                 layer.delete()
             })
-        }, {"commandName": "deleteFrame"});
+        }, {"commandName": "Deleting layer(s)"});
     }
 
     return (

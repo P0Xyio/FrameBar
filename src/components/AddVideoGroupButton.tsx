@@ -28,7 +28,7 @@ const AddVideoGroupButton:React.FunctionComponent<Props> = (props: Props) => {
                     ],
                 }
             ], {});
-        }, {"commandName": "addNewVideoGroup"});
+        }, {"commandName": "Creating a new video group"});
     }
 
     return (

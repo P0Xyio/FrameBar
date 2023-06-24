@@ -59,7 +59,7 @@ const ClearLayerContentButton:React.FunctionComponent<Props> = (props: Props) =>
             if (result.length < 2 || Object.values(result[1]).length > 0) {
                 photoshop.core.showAlert("Could not clear the layer because the Timeline play head is not over the target layer in the Timeline or no layer is selected.");
             }
-        }, {"commandName": "clearLayerContent"});
+        }, {"commandName": "Clearing layer content"});
     }
 
     return (

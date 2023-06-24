@@ -155,7 +155,7 @@ const SetWorkArenaButton:React.FunctionComponent<Props> = (props: Props) => {
             }
         
             photoshop.action.batchPlay(actions, {});
-        }, {"commandName": "setWorkArena"});
+        }, {"commandName": "Setting Work Arena"});
     }
 
     return (

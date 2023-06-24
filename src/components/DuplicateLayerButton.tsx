@@ -24,7 +24,7 @@ const DuplicateLayerButton:React.FunctionComponent<Props> = (props: Props) => {
             selectedLayers.forEach((layer) => {
                 layer.duplicate()
             })
-        }, {"commandName": "duplicateFrame"});
+        }, {"commandName": "Duplicating frame(s)"});
     }
 
     return (

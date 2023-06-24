@@ -18,7 +18,7 @@ const CanvasSizeButton:React.FunctionComponent<Props> = (props: Props) => {
         try {
             photoshop.core.executeAsModal(async () => {
                 return await photoshop.core.performMenuCommand({ "commandID": 1031 });
-            }, {"commandName": "openCanvasSizeSettings"});
+            }, {"commandName": "Opening Canvas Size menu"});
         } catch (e) { console.error(e) }
     }
 

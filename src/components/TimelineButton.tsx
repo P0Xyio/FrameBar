@@ -13,7 +13,7 @@ const TimelineButton:React.FunctionComponent<Props> = (props: Props) => {
         try {
             photoshop.core.executeAsModal(async () => {
                 return await photoshop.core.performMenuCommand({ "commandID": 1188 });
-            }, {"commandName": "openTimeLine"});
+            }, {"commandName": "Toggling Timeline panel"});
         } catch (e) { console.error(e) }
     }
 

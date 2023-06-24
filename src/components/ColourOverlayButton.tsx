@@ -300,7 +300,7 @@ const ColourOverlayButton:React.FunctionComponent<Props> = (props: Props) => {
             }
 
             return photoshop.action.batchPlay(actions, {});
-        }, {"commandName": "countSelectedLayers"})
+        }, {"commandName": "Applying colour overlay"})
     }
 
     return (

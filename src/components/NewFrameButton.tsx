@@ -172,7 +172,7 @@ const NewFrameButton:React.FunctionComponent<Props> = (props: Props) => {
                     layerID: [ result[2].layerID ]
                 }
             ], {})
-        }, {"commandName": "createNewFrame"});
+        }, {"commandName": "Creating new frame(s)"});
     }
 
     return (

@@ -23,7 +23,7 @@ const OnionSkinButton:React.FunctionComponent<Props> = (props: Props) => {
                 if (!result.available) {
                     return photoshop.core.showAlert("The animation must have at least two frames to use Onion Skin.");
                 }
-            }, {"commandName": "enableOnionSkin"});
+            }, {"commandName": "Toggling Onion Skin"});
         } catch (e) { console.error(e) }
     }
 

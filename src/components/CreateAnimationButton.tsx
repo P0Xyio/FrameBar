@@ -105,7 +105,7 @@ const CreateAnimationButton:React.FunctionComponent<Props> = (props: Props) => {
                     layer.delete()
                 }
             })
-        }, {"commandName": "createNewDocument"});
+        }, {"commandName": "Creating a new document"});
     }
 
     return (
