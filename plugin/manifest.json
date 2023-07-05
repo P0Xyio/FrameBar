@@ -2,7 +2,7 @@
     "manifestVersion": 5,
     "id": "7d1256ba",
     "name": "FrameBar",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "main": "index.html",
     "host": [
         {
